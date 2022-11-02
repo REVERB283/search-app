@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import SearchBar from "./components/SearchBar";
+import "./App.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [users, setUsers] = useState([]);
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
+	const getUsers = () => {
+		fetch("http://www.mocky.io/v2/5ba8efb23100007200c2750c")
+			.then((response) => response.json())
+			.then((data) => setUsers(data));
+	};
+
+	return (
+		<div className="container-fluid px-0">
+			<header className="text-center py-3 bg-light border-bottom">
+				<h2>Search App</h2>
+			</header>
+
+			<div className="container">
+				<div className="row my-5">{users.length > 0 && <SearchBar data={users} />}</div>
+			</div>
+		</div>
+	);
 }
 
 export default App;

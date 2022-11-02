@@ -1,0 +1,20 @@
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+li {
+	padding-left: 1rem;
+	text-indent: -2.5rem;
+}
+li::before {
+	content: "\2022";
+	font-weight: bold;
+	width: 2rem;
+	padding-right: 0.5rem;
+	color: cornflowerblue;
+}
+
+.card:hover {
+	background-color: antiquewhite;
+}

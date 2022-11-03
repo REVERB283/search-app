@@ -1,10 +1,69 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./SearchBar.css";
+
+const useKeyPress = (targetKey) => {
+	const [keyPressed, setKeyPressed] = useState(false);
+
+	useEffect(() => {
+		const downHandler = ({ key }) => {
+			if (key === targetKey) {
+				setKeyPressed(true);
+			}
+		};
+
+		const upHandler = ({ key }) => {
+			if (key === targetKey) {
+				setKeyPressed(false);
+			}
+		};
+
+		window.addEventListener("keydown", downHandler);
+		window.addEventListener("keyup", upHandler);
+
+		return () => {
+			window.removeEventListener("keydown", downHandler);
+			window.removeEventListener("keyup", upHandler);
+		};
+	}, [targetKey]);
+
+	return keyPressed;
+};
 
 function SearchBar(props) {
 	const originalArray = props.data;
 	const [users, setUsers] = useState(props.data);
 	const [searchText, setSearchText] = useState("");
+	const [cursor, setCursor] = useState(0);
+	const arrowUpPressed = useKeyPress("ArrowUp");
+	const arrowDownPressed = useKeyPress("ArrowDown");
+	const selectedItemRef = useRef([]);
+	selectedItemRef.current = [];
+
+	useEffect(() => {
+		if (arrowUpPressed) {
+			setCursor((prevValue) => {
+				const currentValue = prevValue !== 0 ? prevValue - 1 : users.length - 1;
+				selectedItemRef.current[currentValue].scrollIntoView({ behavior: "smooth", block: "center" });
+				return currentValue;
+			});
+		}
+	}, [arrowUpPressed]);
+
+	useEffect(() => {
+		if (arrowDownPressed) {
+			setCursor((prevValue) => {
+				const currentValue = prevValue !== users.length - 1 ? prevValue + 1 : 0;
+				selectedItemRef.current[currentValue].scrollIntoView({ behavior: "smooth", block: "center" });
+				return currentValue;
+			});
+		}
+	}, [arrowDownPressed]);
+
+	const addRef = (element) => {
+		if (element && !selectedItemRef.current.includes(element)) {
+			selectedItemRef.current.push(element);
+		}
+	};
 
 	const handleFilter = (event) => {
 		const search = event.target.value;
@@ -23,7 +82,6 @@ function SearchBar(props) {
 			);
 		});
 
-		console.log("--- filtered data ---", filteredData);
 		setUsers(filteredData);
 	};
 
@@ -40,17 +98,23 @@ function SearchBar(props) {
 		);
 	};
 
+	const handleMouseHover = (index) => {
+		setCursor(index);
+		if (arrowDownPressed == false && arrowUpPressed == false) {
+		}
+	};
+
 	return (
 		<div className="col-sm-12">
 			<div className="my-2">
 				<input className="form-control" placeholder="Search users by ID, Name, Address, Pincode..." onChange={handleFilter} />
 			</div>
 
-			<div className="col-sm-12">
+			<div className={`col-sm-12 search-box-height ${searchText.length > 0 && users.length === 0 ? "d-none" : ""}`}>
 				{searchText.length > 0 &&
 					users.map((user, index) => {
 						return (
-							<div className="card py-3 px-4" key={index}>
+							<div className={`card py-3 px-4 ${cursor === index ? "active" : ""}`} key={index} ref={addRef} onMouseMove={() => setCursor(index)}>
 								<p className="m-0 fs-3">{highlightText(user.id)}</p>
 								<p className="m-0 fst-italic">{highlightText(user.name)}</p>
 								{user.isItemFound && (

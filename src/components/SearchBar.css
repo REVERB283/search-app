@@ -15,6 +15,11 @@ li::before {
 	color: cornflowerblue;
 }
 
-.card:hover {
+.search-box-height {
+	height: 50vh;
+	overflow: auto;
+}
+
+.card.active {
 	background-color: antiquewhite;
 }

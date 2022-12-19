@@ -47,7 +47,7 @@ function SearchBar(props) {
 				return currentValue;
 			});
 		}
-	}, [arrowUpPressed]);
+	}, [arrowUpPressed, users]);
 
 	useEffect(() => {
 		if (arrowDownPressed) {
@@ -57,7 +57,7 @@ function SearchBar(props) {
 				return currentValue;
 			});
 		}
-	}, [arrowDownPressed]);
+	}, [arrowDownPressed, users]);
 
 	const addRef = (element) => {
 		if (element && !selectedItemRef.current.includes(element)) {
@@ -96,12 +96,6 @@ function SearchBar(props) {
 				))}
 			</span>
 		);
-	};
-
-	const handleMouseHover = (index) => {
-		setCursor(index);
-		if (arrowDownPressed == false && arrowUpPressed == false) {
-		}
 	};
 
 	return (

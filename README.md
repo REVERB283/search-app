@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Deployed URL
 
-This project was bootstrapped with [Auto Search](https://suggest-auto.netlify.app/).
+This project was deployed on [Auto Search](https://suggest-auto.netlify.app/).
 
 ## Available Scripts
 

@@ -11,7 +11,7 @@ function App() {
 	}, []);
 
 	const getUsers = () => {
-		fetch("http://www.mocky.io/v2/5ba8efb23100007200c2750c")
+		fetch("https://www.mocky.io/v2/5ba8efb23100007200c2750c")
 			.then((response) => response.json())
 			.then((data) => setUsers(data));
 	};
